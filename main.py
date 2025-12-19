@@ -18,7 +18,9 @@ def check_dependencies():
         'dotenv': 'python-dotenv',
         'pydantic': 'pydantic',
         'flask': 'flask',
-        'flask_cors': 'flask-cors'
+        'flask_cors': 'flask-cors',
+        'pytz': 'pytz',
+        'dateutil': 'python-dateutil'
     }
     
     missing = []

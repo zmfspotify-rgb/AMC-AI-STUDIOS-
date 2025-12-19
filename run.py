@@ -35,7 +35,9 @@ def install_deps():
         "python-dotenv",
         "pydantic",
         "flask",
-        "flask-cors"
+        "flask-cors",
+        "pytz",
+        "python-dateutil"
     ]
     
     try:

@@ -26,7 +26,7 @@
 └──────────────────────────────────────────────────────────────────────────┘
 
    Step 1: Install dependencies
-           pip install python-dotenv pydantic flask flask-cors
+           pip install python-dotenv pydantic flask flask-cors pytz python-dateutil
    
    Step 2: Run the app
            python3 main.py
@@ -72,7 +72,7 @@ Solution: Install Python from python.org
          Check "Add Python to PATH" during installation
 
 Problem: "Module not found" errors
-Solution: Run: pip install python-dotenv pydantic flask flask-cors
+Solution: Run: pip install python-dotenv pydantic flask flask-cors pytz python-dateutil
 
 Problem: "Port 5000 already in use"
 Solution: Close other programs using port 5000

@@ -19,7 +19,7 @@ if %errorlevel% neq 0 (
 
 echo Step 2: Installing dependencies...
 python -m pip install --quiet --upgrade pip
-python -m pip install --quiet python-dotenv pydantic flask flask-cors
+python -m pip install --quiet python-dotenv pydantic flask flask-cors pytz python-dateutil
 
 echo Step 3: Starting application...
 echo.
