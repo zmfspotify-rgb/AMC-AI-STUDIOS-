@@ -151,13 +151,23 @@ class UIServer:
         )
         self.theater_update_thread.start()
         
-        # Run Flask app
-        self.app.run(
-            host=self.config.flask_host,
-            port=self.config.flask_port,
-            debug=self.config.flask_debug,
-            use_reloader=False  # Disable reloader to avoid double initialization
-        )
+        # Run Flask app with error handling
+        try:
+            self.app.run(
+                host=self.config.flask_host,
+                port=self.config.flask_port,
+                debug=self.config.flask_debug,
+                use_reloader=False  # Disable reloader to avoid double initialization
+            )
+        except OSError as e:
+            if "Address already in use" in str(e) or "port" in str(e).lower():
+                self.logger.error(f"Port {self.config.flask_port} is already in use!")
+                self.logger.error("Please either:")
+                self.logger.error("  1. Stop the other application using this port")
+                self.logger.error("  2. Change FLASK_PORT in your .env file")
+                raise
+            else:
+                raise
     
     def _update_theater_loop(self):
         """Background loop to update theater state."""

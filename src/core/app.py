@@ -58,17 +58,27 @@ class AMCStudiosApp:
         server_thread.start()
         
         # Wait a moment for server to start
-        time.sleep(2)
+        time.sleep(3)
         
         # Open browser
         url = f"http://{self.config.flask_host}:{self.config.flask_port}"
-        self.logger.info(f"Opening browser at {url}")
+        
+        # Print clear instructions
+        print("\n" + "=" * 70)
+        print("🎬 AMC AI STUDIOS - READY!")
+        print("=" * 70)
+        print(f"\n✅ Server running at: {url}")
+        print("\n📱 TO ACCESS THE APPLICATION:")
+        print(f"   1. Open your web browser")
+        print(f"   2. Navigate to: {url}")
+        print(f"\n⏹️  TO STOP: Press Ctrl+C")
+        print("=" * 70 + "\n")
         
         try:
             webbrowser.open(url)
+            self.logger.info(f"Browser opened automatically to {url}")
         except Exception as e:
-            self.logger.warning(f"Could not open browser automatically: {e}")
-            self.logger.info(f"Please open your browser and navigate to: {url}")
+            self.logger.info(f"Could not open browser automatically (this is normal in some environments)")
         
         # Keep main thread alive
         self.logger.info("Application running. Press Ctrl+C to exit.")
@@ -76,6 +86,7 @@ class AMCStudiosApp:
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:
+            print("\n\nShutting down...")
             self.logger.info("Shutting down...")
             self.shutdown()
     
