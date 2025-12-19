@@ -9,6 +9,7 @@ import time
 from src.core.config import Config
 from src.ui.server import UIServer
 from src.pipelines.orchestrator import PipelineOrchestrator
+from src.pipelines.slate_manager import StudioSlateManager
 from src.theater.theater_manager import TheaterManager
 
 
@@ -38,11 +39,14 @@ class AMCStudiosApp:
         # Pipeline orchestrator - manages all AI pipelines
         self.orchestrator = PipelineOrchestrator(config)
         
+        # Studio slate manager - manages multiple concurrent projects
+        self.slate_manager = StudioSlateManager(config, self.orchestrator)
+        
         # Theater manager - manages virtual AMC theater
         self.theater_manager = TheaterManager(config)
         
         # UI Server - web-based interface
-        self.ui_server = UIServer(config, self.orchestrator, self.theater_manager)
+        self.ui_server = UIServer(config, self.orchestrator, self.theater_manager, self.slate_manager)
         
         self.logger.info("Initialization complete")
     

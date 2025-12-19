@@ -6,9 +6,11 @@ from flask_cors import CORS
 import threading
 import time
 from pathlib import Path
+from datetime import datetime
 
 from src.core.config import Config
 from src.pipelines.orchestrator import PipelineOrchestrator
+from src.pipelines.slate_manager import StudioSlateManager
 from src.theater.theater_manager import TheaterManager
 from src.models.schema import ProjectType
 
@@ -20,12 +22,14 @@ class UIServer:
         self,
         config: Config,
         orchestrator: PipelineOrchestrator,
-        theater_manager: TheaterManager
+        theater_manager: TheaterManager,
+        slate_manager: StudioSlateManager
     ):
         """Initialize UI server."""
         self.config = config
         self.orchestrator = orchestrator
         self.theater_manager = theater_manager
+        self.slate_manager = slate_manager
         self.logger = logging.getLogger("AMCStudios.UI")
         
         # Create Flask app
@@ -133,6 +137,188 @@ class UIServer:
                 }
                 for p in self.theater_manager.now_showing
             ])
+        
+        # Studio Slate Management
+        @self.app.route('/api/slate', methods=['GET'])
+        def get_slate():
+            """Get studio slate overview."""
+            return jsonify(self.slate_manager.get_slate_overview())
+        
+        @self.app.route('/api/slate/statistics', methods=['GET'])
+        def get_studio_stats():
+            """Get studio statistics."""
+            return jsonify(self.slate_manager.get_studio_statistics())
+        
+        @self.app.route('/api/projects/<project_id>/production/start', methods=['POST'])
+        def start_production(project_id):
+            """Start production on a project."""
+            success = self.slate_manager.start_production(project_id)
+            return jsonify({"success": success})
+        
+        @self.app.route('/api/projects/<project_id>/production/status', methods=['GET'])
+        def get_production_status(project_id):
+            """Get production status."""
+            return jsonify(self.slate_manager.get_production_status(project_id))
+        
+        # Ticketing
+        @self.app.route('/api/ticketing/theaters', methods=['GET'])
+        def get_theaters():
+            """Get theater configurations."""
+            return jsonify({
+                theater_id: {
+                    "id": theater_id,
+                    "name": config["name"],
+                    "rows": config["rows"],
+                    "seats_per_row": config["seats_per_row"]
+                }
+                for theater_id, config in self.theater_manager.ticketing.theaters.items()
+            })
+        
+        @self.app.route('/api/ticketing/seat-map/<theater_id>', methods=['GET'])
+        def get_seat_map(theater_id):
+            """Get seat map for a theater."""
+            return jsonify(self.theater_manager.ticketing.get_seat_map(theater_id))
+        
+        @self.app.route('/api/ticketing/showtimes/<project_id>', methods=['GET'])
+        def get_showtimes(project_id):
+            """Get showtimes for a project."""
+            showtimes = self.theater_manager.ticketing.showtimes.get(project_id, [])
+            return jsonify([
+                {
+                    "showtime_id": s.showtime_id,
+                    "theater_id": s.theater_id,
+                    "start_time": s.start_time.isoformat(),
+                    "is_premiere": s.is_premiere
+                }
+                for s in showtimes
+            ])
+        
+        @self.app.route('/api/ticketing/purchase', methods=['POST'])
+        def purchase_ticket():
+            """Purchase a ticket."""
+            data = request.json
+            
+            # Get showtime
+            showtimes = self.theater_manager.ticketing.showtimes.get(data['project_id'], [])
+            showtime = next((s for s in showtimes if s.showtime_id == data['showtime_id']), None)
+            
+            if not showtime:
+                return jsonify({"error": "Showtime not found"}), 404
+            
+            ticket = self.theater_manager.ticketing.purchase_ticket(
+                data['project_id'],
+                data['theater_id'],
+                data['seat_id'],
+                showtime,
+                "player"
+            )
+            
+            if ticket:
+                return jsonify({
+                    "success": True,
+                    "ticket": ticket.model_dump(mode='json')
+                })
+            else:
+                return jsonify({"error": "Seat not available"}), 400
+        
+        # Release Management
+        @self.app.route('/api/release/<project_id>/status', methods=['GET'])
+        def get_release_status(project_id):
+            """Get release status for a project."""
+            project = self.orchestrator.get_project(project_id)
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            return jsonify(self.theater_manager.release_manager.get_release_status(project))
+        
+        @self.app.route('/api/release/<project_id>/content', methods=['GET'])
+        def get_available_content(project_id):
+            """Get available content based on release window."""
+            project = self.orchestrator.get_project(project_id)
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            return jsonify(self.theater_manager.release_manager.get_available_content(project))
+        
+        @self.app.route('/api/release/<project_id>/schedule', methods=['POST'])
+        def schedule_release(project_id):
+            """Schedule a release date."""
+            data = request.json
+            project = self.orchestrator.get_project(project_id)
+            
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            release_date = datetime.fromisoformat(data['release_date'])
+            self.theater_manager.release_manager.schedule_release(
+                project,
+                release_date,
+                data.get('digital_delay_days', 45)
+            )
+            
+            return jsonify({"success": True})
+        
+        # Red Carpet Events
+        @self.app.route('/api/red-carpet/<project_id>/schedule', methods=['POST'])
+        def schedule_red_carpet(project_id):
+            """Schedule a red carpet event."""
+            data = request.json
+            project = self.orchestrator.get_project(project_id)
+            
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            event_time = None
+            if 'event_time' in data:
+                event_time = datetime.fromisoformat(data['event_time'])
+            
+            event = self.theater_manager.release_manager.schedule_red_carpet(
+                project,
+                event_time,
+                data.get('attending_actors', [])
+            )
+            
+            return jsonify(event.model_dump(mode='json'))
+        
+        @self.app.route('/api/red-carpet/<project_id>/active', methods=['GET'])
+        def check_red_carpet_active(project_id):
+            """Check if red carpet event is active."""
+            event = self.theater_manager.release_manager.check_red_carpet_active(project_id)
+            
+            if event:
+                return jsonify(event.model_dump(mode='json'))
+            else:
+                return jsonify({"active": False})
+        
+        # NPC Reviews and Analytics
+        @self.app.route('/api/reviews/<project_id>', methods=['GET'])
+        def get_project_reviews(project_id):
+            """Get NPC reviews for a project."""
+            reviews = self.theater_manager.npc_intelligence.reviews.get(project_id, [])
+            return jsonify([r.model_dump(mode='json') for r in reviews])
+        
+        @self.app.route('/api/analytics/<project_id>', methods=['GET'])
+        def get_project_analytics(project_id):
+            """Get project analytics."""
+            project = self.orchestrator.get_project(project_id)
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            return jsonify(self.theater_manager.npc_intelligence.get_project_analytics(project))
+        
+        @self.app.route('/api/analytics/trending', methods=['GET'])
+        def get_trending():
+            """Get trending projects."""
+            return jsonify(self.theater_manager.npc_intelligence.get_trending_projects())
+        
+        @self.app.route('/api/analytics/<project_id>/sequel', methods=['GET'])
+        def check_sequel_greenlight(project_id):
+            """Check if project should get a sequel."""
+            project = self.orchestrator.get_project(project_id)
+            if not project:
+                return jsonify({"error": "Project not found"}), 404
+            
+            return jsonify(self.theater_manager.npc_intelligence.should_greenlight_sequel(project))
         
         @self.app.route('/health', methods=['GET'])
         def health():
