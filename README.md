@@ -4,6 +4,57 @@
 
 A complete, functional AI-powered entertainment production system that autonomously creates movies and TV shows from concept to completion, featuring a virtual AMC theater with AI-driven NPCs.
 
+## 🚀 QUICK START (3 EASY WAYS)
+
+### ⭐ METHOD 1: AUTOMATIC LAUNCHER (EASIEST!)
+
+**Windows:**
+```bash
+Double-click RUN.bat
+```
+
+**Mac/Linux:**
+```bash
+python3 run.py
+```
+
+This automatically installs all dependencies and starts the app!
+Then open your browser to: **http://localhost:5000**
+
+---
+
+### METHOD 2: Simple Manual Start
+
+```bash
+# Install dependencies
+pip install python-dotenv pydantic flask flask-cors
+
+# Run the app
+python3 main.py
+
+# Open browser to http://localhost:5000
+```
+
+---
+
+### METHOD 3: Full Launcher (Windows)
+
+```bash
+launch.bat
+```
+
+---
+
+## 🎬 What You'll See
+
+Once you open **http://localhost:5000**, you'll see:
+
+- **Create Tab**: Build new movies/TV shows
+- **Projects Tab**: Monitor your productions
+- **Theater Tab**: Virtual AMC cinema with 20 AI NPCs
+
+---
+
 ## 🚀 Features
 
 ### Complete AI Production Pipeline
