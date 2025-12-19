@@ -43,6 +43,32 @@ class PipelineStatus(str, Enum):
     FAILED = "failed"
 
 
+class ProjectStatus(str, Enum):
+    """Overall project status in studio slate."""
+    IN_DEVELOPMENT = "in_development"
+    IN_PRODUCTION = "in_production"
+    IN_POST = "in_post"
+    MARKETING = "marketing"
+    RELEASED = "released"
+    ARCHIVED = "archived"
+
+
+class ReleaseWindow(str, Enum):
+    """Release window type."""
+    THEATRICAL = "theatrical"
+    DIGITAL = "digital"
+    STREAMING = "streaming"
+    ARCHIVE = "archive"
+
+
+class CutType(str, Enum):
+    """Type of movie cut."""
+    THEATRICAL = "theatrical"
+    EXTENDED = "extended"
+    DIRECTORS = "directors"
+    HOME = "home"
+
+
 class ActorProfile(BaseModel):
     """AI Actor profile with persistent identity."""
     id: str
@@ -134,15 +160,31 @@ class Project(BaseModel):
         "release": PipelineStatus.PENDING,
     })
     
+    # Project status in studio slate
+    project_status: ProjectStatus = ProjectStatus.IN_DEVELOPMENT
+    
     # Assets
     poster_path: Optional[str] = None
     trailer_path: Optional[str] = None
     final_video_path: Optional[str] = None
+    theatrical_cut_path: Optional[str] = None
+    directors_cut_path: Optional[str] = None
+    home_cut_path: Optional[str] = None
+    
+    # Release information
+    release_date: Optional[datetime] = None
+    digital_release_date: Optional[datetime] = None
+    current_release_window: ReleaseWindow = ReleaseWindow.THEATRICAL
+    is_released: bool = False
+    
+    # Box office and performance
+    box_office_total: float = 0.0
+    npc_reviews: List[Dict[str, Any]] = Field(default_factory=list)
+    average_rating: float = 0.0
     
     # Metadata
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    release_date: Optional[datetime] = None
 
 
 class NPCState(BaseModel):
@@ -150,9 +192,100 @@ class NPCState(BaseModel):
     id: str
     name: str
     position: List[float] = Field(default_factory=lambda: [0.0, 0.0, 0.0])
+    rotation: float = 0.0  # Y-axis rotation in radians
     current_action: str = "idle"
     target_location: Optional[str] = None
     movie_watching: Optional[str] = None
     emotional_state: str = "neutral"
     has_ticket: bool = False
     has_concessions: bool = False
+    seat_number: Optional[str] = None
+    ticket_id: Optional[str] = None
+
+
+class Seat(BaseModel):
+    """Theater seat model."""
+    seat_id: str
+    theater_id: str
+    row: str
+    number: int
+    is_reserved: bool = False
+    reserved_by: Optional[str] = None  # NPC ID or "player"
+    is_premium: bool = False
+    position: List[float] = Field(default_factory=lambda: [0.0, 0.0, 0.0])
+
+
+class Ticket(BaseModel):
+    """Movie ticket model."""
+    ticket_id: str
+    project_id: str
+    project_title: str
+    theater_id: str
+    seat_id: str
+    showtime: datetime
+    purchased_at: datetime = Field(default_factory=datetime.now)
+    purchased_by: str  # "player" or NPC ID
+    price: float = 12.50
+    is_used: bool = False
+
+
+class Showtime(BaseModel):
+    """Movie showtime."""
+    showtime_id: str
+    project_id: str
+    theater_id: str
+    start_time: datetime
+    trailers_duration: int = 15  # minutes
+    is_premiere: bool = False
+
+
+class Trailer(BaseModel):
+    """Trailer asset."""
+    trailer_id: str
+    project_id: str
+    title: str
+    duration: int  # seconds
+    video_path: str
+    thumbnail_path: Optional[str] = None
+    trailer_type: str = "teaser"  # teaser, official, final
+    created_at: datetime = Field(default_factory=datetime.now)
+
+
+class Interview(BaseModel):
+    """AI-generated interview content."""
+    interview_id: str
+    project_id: str
+    title: str
+    interviewer_name: str
+    interviewer_personality: str  # serious, funny, chaotic, fan-focused
+    actors: List[str]  # Actor IDs
+    content_path: str
+    interview_type: str  # sit-down, late-night, game, roundtable, behind-the-scenes
+    duration: int  # seconds
+    created_at: datetime = Field(default_factory=datetime.now)
+
+
+class RedCarpetEvent(BaseModel):
+    """Red carpet premiere event."""
+    event_id: str
+    project_id: str
+    event_time: datetime
+    duration: int = 60  # minutes
+    attending_actors: List[str]  # Actor IDs
+    is_active: bool = False
+    is_completed: bool = False
+    replay_available: bool = False
+    replay_path: Optional[str] = None
+
+
+class NPCReview(BaseModel):
+    """NPC review of a movie."""
+    review_id: str
+    npc_id: str
+    npc_name: str
+    project_id: str
+    rating: float  # 0-10
+    sentiment: str  # positive, negative, mixed
+    review_text: str
+    emotional_reaction: List[str] = Field(default_factory=list)  # [laugh, gasp, clap, etc.]
+    created_at: datetime = Field(default_factory=datetime.now)
