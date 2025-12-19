@@ -35,9 +35,14 @@ wheels/
 .env.local
 
 # Data (generated content)
-data/projects/
-data/assets/
-data/cache/
+data/projects/*
+!data/projects/README.md
+data/assets/*
+!data/assets/README.md
+data/cache/*
+!data/cache/README.md
+data/actors/*
+!data/actors/README.md
 data/*.db
 data/*.db-journal
 
@@ -51,4 +56,3 @@ Thumbs.db
 
 # Build artifacts
 *.exe
-*.spec

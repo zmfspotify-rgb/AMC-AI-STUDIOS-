@@ -1,0 +1,116 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         AMC AI STUDIOS - QUICK START                         ║
+║                   Fully AI-Generated Movie & TV Studio                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+🎬 GET STARTED IN 3 STEPS:
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: LAUNCH THE APPLICATION                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   • Double-click "launch.bat"
+   • Wait for the browser to open automatically
+   • If browser doesn't open, go to: http://localhost:5000
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: CREATE YOUR FIRST MOVIE                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   1. Fill in the form:
+      - Title: Your movie name
+      - Type: Feature Film or TV Show
+      - Rating: G, PG, PG-13, R, or TV-MA
+      - Genres: Select one or more
+      - Story: Describe your story in 1-3 paragraphs
+
+   2. Click "🎬 Create Movie"
+
+   3. Choose "Yes" to start the AI pipeline
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: WATCH THE AI WORK                                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+   The AI will automatically:
+   ✍️  Write a complete screenplay
+   🎭 Cast AI actors with persistent identities
+   🎥 Film all scenes
+   🎞️  Edit, color grade, add music
+   📣 Create marketing materials
+   🎉 Release to the virtual theater
+
+
+📋 SYSTEM REQUIREMENTS:
+
+   • Windows 10 or later
+   • Python 3.10+ (installed automatically by launch.bat)
+   • 2GB free disk space
+   • Internet connection (optional, for enhanced AI features)
+
+
+🎯 KEY FEATURES:
+
+   ✓ Complete AI production pipeline (Story → Release)
+   ✓ Persistent AI actors (consistent across projects)
+   ✓ Virtual AMC Theater with AI NPCs
+   ✓ Hollywood-format screenplays
+   ✓ Automated marketing materials
+   ✓ No coding required
+
+
+🎭 VIRTUAL THEATER:
+
+   • Click "Theater" to see your virtual AMC cinema
+   • Watch AI NPCs:
+     - Buy tickets
+     - Get concessions
+     - Watch movies
+     - React to scenes (laugh, gasp, clap)
+
+
+⚙️ OPTIONAL: ENHANCED AI (Advanced Users)
+
+   For better AI generation:
+   1. Copy ".env.template" to ".env"
+   2. Add your API keys:
+      OPENAI_API_KEY=your_key_here
+      ANTHROPIC_API_KEY=your_key_here
+   3. Restart the application
+
+   Note: System works without API keys in "template mode"
+
+
+📖 MORE HELP:
+
+   • USER_GUIDE.md - Complete user manual
+   • DEVELOPER_GUIDE.md - Technical documentation
+   • README.md - Full project overview
+
+
+🎬 EXAMPLE PROJECT:
+
+   Title: "The Last Horizon"
+   Type: Feature Film
+   Rating: PG-13
+   Genres: Sci-Fi, Action, Adventure
+   Runtime: 120 minutes
+   Tone: Cinematic
+
+   Story: "In the year 2157, Earth's last starship searches for a new home 
+   among the stars. Captain Sarah Chen must navigate deadly space anomalies, 
+   alien encounters, and crew conflicts as humanity's survival hangs in the 
+   balance. When they discover a mysterious signal from an uncharted planet, 
+   they must decide whether to investigate or continue their desperate journey."
+
+
+🚀 READY TO CREATE?
+
+   1. Launch → Create → Enjoy!
+   2. Projects are saved in the "data/projects" folder
+   3. Create as many movies and shows as you want!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          Enjoy Your AI Studio! 🎬🍿
+═══════════════════════════════════════════════════════════════════════════════
