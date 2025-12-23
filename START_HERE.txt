@@ -1,0 +1,137 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🎬 AMC AI STUDIOS - START HERE! 🎬                        ║
+║                                                                              ║
+║                         EASIEST WAY TO LAUNCH                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+🚀 INSTANT START - CHOOSE YOUR METHOD:
+══════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ METHOD 1: AUTOMATIC LAUNCHER (RECOMMENDED) ⭐                            │
+└──────────────────────────────────────────────────────────────────────────┘
+
+   Windows:     Double-click RUN.bat
+   
+   Mac/Linux:   python3 run.py
+   
+   This automatically installs everything and starts the app!
+
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ METHOD 2: MANUAL (IF METHOD 1 DOESN'T WORK)                             │
+└──────────────────────────────────────────────────────────────────────────┘
+
+   Step 1: Install dependencies
+           pip install python-dotenv pydantic flask flask-cors pytz python-dateutil
+   
+   Step 2: Run the app
+           python3 main.py
+   
+   Step 3: Open browser
+           http://localhost:5000
+
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ METHOD 3: FULL LAUNCHER (WINDOWS ONLY)                                  │
+└──────────────────────────────────────────────────────────────────────────┘
+
+   Double-click launch.bat
+   
+   This creates a virtual environment and manages everything.
+
+
+══════════════════════════════════════════════════════════════════════════════
+✅ HOW TO KNOW IT'S WORKING
+══════════════════════════════════════════════════════════════════════════════
+
+You'll see this message:
+
+   ======================================================================
+   🎬 AMC AI STUDIOS - READY!
+   ======================================================================
+   
+   ✅ Server running at: http://127.0.0.1:5000
+   
+   📱 TO ACCESS THE APPLICATION:
+      1. Open your web browser
+      2. Navigate to: http://127.0.0.1:5000
+
+Then just open that URL in your browser!
+
+
+══════════════════════════════════════════════════════════════════════════════
+❓ TROUBLESHOOTING
+══════════════════════════════════════════════════════════════════════════════
+
+Problem: "Python is not recognized"
+Solution: Install Python from python.org
+         Check "Add Python to PATH" during installation
+
+Problem: "Module not found" errors
+Solution: Run: pip install python-dotenv pydantic flask flask-cors pytz python-dateutil
+
+Problem: "Port 5000 already in use"
+Solution: Close other programs using port 5000
+         OR change port in .env file (FLASK_PORT=5001)
+
+Problem: Browser doesn't open automatically
+Solution: This is NORMAL! Just manually open: http://localhost:5000
+
+
+══════════════════════════════════════════════════════════════════════════════
+🎮 WHAT YOU'LL SEE
+══════════════════════════════════════════════════════════════════════════════
+
+Once you open http://localhost:5000, you'll see:
+
+   🎬 AMC AI STUDIOS
+   [Create] [Projects] [Theater]
+   
+   CREATE TAB:
+   • Make new movies and TV shows
+   • Fill in story, genre, rating
+   • Click "Create Movie"
+   • Watch AI generate everything!
+   
+   PROJECTS TAB:
+   • See all your productions
+   • Monitor pipeline progress
+   
+   THEATER TAB:
+   • Virtual AMC cinema
+   • 20 AI NPCs walking around
+   • Watch them buy tickets, popcorn
+   • See them watch movies!
+
+
+══════════════════════════════════════════════════════════════════════════════
+📁 IMPORTANT FILES
+══════════════════════════════════════════════════════════════════════════════
+
+   RUN.bat           - Windows one-click launcher ⭐ EASIEST
+   run.py            - Cross-platform automatic launcher ⭐ EASIEST
+   launch.bat        - Full Windows launcher with venv
+   main.py           - Manual start
+   
+   TROUBLESHOOTING.md - Detailed solutions
+   USER_GUIDE.md     - Complete manual
+
+
+══════════════════════════════════════════════════════════════════════════════
+🎬 READY TO CREATE AI MOVIES!
+══════════════════════════════════════════════════════════════════════════════
+
+Just run ONE of these:
+   • RUN.bat (Windows)
+   • python3 run.py (Mac/Linux)
+   • python3 main.py (after installing dependencies)
+
+Then open: http://localhost:5000
+
+Start creating amazing AI-generated entertainment! 🍿
+
+══════════════════════════════════════════════════════════════════════════════
